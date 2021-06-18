@@ -154,28 +154,6 @@ dataset = dataset.batch(BATCH_SIZE, drop_remainder=True)
 
 example_input_batch, example_target_batch = next(iter(dataset))
 
-"""## Write the encoder and decoder model
-Here, we'll implement an encoder-decoder model with attention which you can read about in the TensorFlow [Neural Machine Translation (seq2seq) tutorial](https://www.tensorflow.org/tutorials/seq2seq). This example uses a more recent set of APIs. This notebook implements the [attention equations](https://www.tensorflow.org/tutorials/seq2seq#background_on_the_attention_mechanism) from the seq2seq tutorial. The following diagram shows that each input words is assigned a weight by the attention mechanism which is then used by the decoder to predict the next word in the sentence.
-<img src="https://www.tensorflow.org/images/seq2seq/attention_mechanism.jpg" width="500" alt="attention mechanism">
-The input is put through an encoder model which gives us the encoder output of shape *(batch_size, max_length, hidden_size)* and the encoder hidden state of shape *(batch_size, hidden_size)*.
-Here are the equations that are implemented:
-<img src="https://www.tensorflow.org/images/seq2seq/attention_equation_0.jpg" alt="attention equation 0" width="800">
-<img src="https://www.tensorflow.org/images/seq2seq/attention_equation_1.jpg" alt="attention equation 1" width="800">
-We're using *Bahdanau attention*. Lets decide on notation before writing the simplified form:
-* FC = Fully connected (dense) layer
-* EO = Encoder output
-* H = hidden state
-* X = input to the decoder
-And the pseudo-code:
-* `score = FC(tanh(FC(EO) + FC(H)))`
-* `attention weights = softmax(score, axis = 1)`. Softmax by default is applied on the last axis but here we want to apply it on the *1st axis*, since the shape of score is *(batch_size, max_length, hidden_size)*. `Max_length` is the length of our input. Since we are trying to assign a weight to each input, softmax should be applied on that axis.
-* `context vector = sum(attention weights * EO, axis = 1)`. Same reason as above for choosing axis as 1.
-* `embedding output` = The input to the decoder X is passed through an embedding layer.
-* `merged vector = concat(embedding output, context vector)`
-* This merged vector is then given to the GRU
-The shapes of all the vectors at each step have been specified in the comments in the code:
-"""
-
 
 class Encoder(tf.keras.Model):
     def __init__(self, vocab_size, embedding_dim, enc_units, batch_sz):
@@ -310,15 +288,7 @@ checkpoint = tf.train.Checkpoint(optimizer=optimizer,
                                  encoder=encoder,
                                  decoder=decoder)
 
-"""## Training
-1. Pass the *input* through the *encoder* which return *encoder output* and the *encoder hidden state*.
-2. The encoder output, encoder hidden state and the decoder input (which is the *start token*) is passed to the decoder.
-3. The decoder returns the *predictions* and the *decoder hidden state*.
-4. The decoder hidden state is then passed back into the model and the predictions are used to calculate the loss.
-5. Use *teacher forcing* to decide the next input to the decoder.
-6. *Teacher forcing* is the technique where the *target word* is passed as the *next input* to the decoder.
-7. The final step is to calculate the gradients and apply it to the optimizer and backpropagate.
-"""
+# Training
 
 
 @tf.function
