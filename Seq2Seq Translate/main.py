@@ -457,9 +457,14 @@ checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
 
 #translate(u'hace mucho frio aqui.')
 
-sentence= input(str('metin giriniz ispanyolca'))
-translate(sentence)
+translate(u'hace mucho frio aqui.')
 
+translate(u'esta es mi vida.')
+
+translate(u'¿todavia estan en casa?')
+
+# wrong translation
+translate(u'trata de averiguarlo.')
 """## Next steps
 * [Download a different dataset](http://www.manythings.org/anki/) to experiment with translations, for example, English to German, or English to French.
 * Experiment with training on a larger dataset, or using more epochs
